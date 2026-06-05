@@ -6,6 +6,7 @@ from pathlib import Path
 from .config import COLLECTION_NAME, DEFAULT_TOP_K, EVALUATION_STORAGE_DIR, OUTPUTS_DIR
 from .data_loader import format_hours, sort_tasks_for_split
 from .estimator import estimate_from_matches, query_text
+from .planning_views import format_story_point_label, story_points_for_hours
 from .vector_store import TicketVectorStore
 
 
@@ -38,6 +39,8 @@ def evaluate(
 
     global_average = sum(task["actual_hours"] for task in train_tasks) / len(train_tasks)
     global_median = median([task["actual_hours"] for task in train_tasks])
+    global_average_story_points = story_points_for_hours(global_average)
+    global_median_story_points = story_points_for_hours(global_median)
 
     rows = []
     for task in test_tasks:
@@ -45,19 +48,34 @@ def evaluate(
         matches = store.query(query, ollama_client, top_k=min(top_k, len(train_tasks)))
         rag_stats = estimate_from_matches(matches)
         actual = float(task["actual_hours"])
+        actual_story_points = story_points_for_hours(actual)
+        rag_story_points = story_points_for_hours(rag_stats["point_estimate"])
 
         rows.append(
             {
                 "task_id": task["task_id"],
                 "title": task["title"],
                 "actual_hours": actual,
+                "actual_story_points": actual_story_points,
                 "global_average_prediction": global_average,
                 "global_average_absolute_error": abs(global_average - actual),
+                "global_average_story_points_prediction": global_average_story_points,
+                "global_average_story_points_absolute_error": abs(
+                    global_average_story_points - actual_story_points
+                ),
                 "global_median_prediction": global_median,
                 "global_median_absolute_error": abs(global_median - actual),
+                "global_median_story_points_prediction": global_median_story_points,
+                "global_median_story_points_absolute_error": abs(
+                    global_median_story_points - actual_story_points
+                ),
                 "rag_median_prediction": rag_stats["point_estimate"],
                 "rag_median_absolute_error": abs(
                     rag_stats["point_estimate"] - actual
+                ),
+                "rag_median_story_points_prediction": rag_story_points,
+                "rag_median_story_points_absolute_error": abs(
+                    rag_story_points - actual_story_points
                 ),
                 "rag_confidence": rag_stats["confidence"],
                 "retrieved_task_ids": " ".join(
@@ -73,8 +91,17 @@ def evaluate(
         "global_average_mae": mean(
             row["global_average_absolute_error"] for row in rows
         ),
+        "global_average_story_points_mae": mean(
+            row["global_average_story_points_absolute_error"] for row in rows
+        ),
         "global_median_mae": mean(row["global_median_absolute_error"] for row in rows),
+        "global_median_story_points_mae": mean(
+            row["global_median_story_points_absolute_error"] for row in rows
+        ),
         "rag_median_mae": mean(row["rag_median_absolute_error"] for row in rows),
+        "rag_median_story_points_mae": mean(
+            row["rag_median_story_points_absolute_error"] for row in rows
+        ),
         "rows": rows,
     }
 
@@ -116,8 +143,14 @@ def render_evaluation(summary: dict) -> str:
             f"Evaluation index: {summary['evaluation_storage_dir']}",
             "",
             f"Global average MAE: {format_hours(summary['global_average_mae'])}h",
+            "Global average derived story point MAE: "
+            f"{format_story_point_label(summary['global_average_story_points_mae'])}",
             f"Global median MAE: {format_hours(summary['global_median_mae'])}h",
+            "Global median derived story point MAE: "
+            f"{format_story_point_label(summary['global_median_story_points_mae'])}",
             f"RAG median MAE: {format_hours(summary['rag_median_mae'])}h",
+            "RAG median derived story point MAE: "
+            f"{format_story_point_label(summary['rag_median_story_points_mae'])}",
             "",
             f"Saved: {summary['output_path']}",
         ]

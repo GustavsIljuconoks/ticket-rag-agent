@@ -5,6 +5,11 @@ import math
 import statistics
 
 from .data_loader import format_hours
+from .planning_views import (
+    format_story_point_label,
+    format_story_points,
+    planning_views_from_stats,
+)
 
 
 def query_text(task_description: str) -> str:
@@ -74,6 +79,7 @@ def build_explanation_prompt(
     matches: list[dict],
     stats: dict,
 ) -> str:
+    planning_views = planning_views_from_stats(stats)
     evidence = []
     for match in matches:
         metadata = match["metadata"]
@@ -92,6 +98,16 @@ def build_explanation_prompt(
 
     payload = {
         "new_task": new_task,
+        "planning_views": {
+            "time": {
+                "range": f"{format_hours(planning_views['time']['range_low'])}-{format_hours(planning_views['time']['range_high'])} hours",
+                "point_estimate": planning_views["time"]["point_estimate"],
+            },
+            "story_points": {
+                "range": f"{format_story_points(planning_views['story_points']['range_low'])}-{format_story_points(planning_views['story_points']['range_high'])} points",
+                "point_estimate": planning_views["story_points"]["point_estimate"],
+            },
+        },
         "suggested_estimate": {
             "range": f"{format_hours(stats['range_low'])}-{format_hours(stats['range_high'])} hours",
             "point_estimate": stats["point_estimate"],
@@ -156,15 +172,25 @@ def render_estimate(
     stats: dict,
     explanation: dict | None = None,
 ) -> str:
+    planning_views = planning_views_from_stats(stats)
     lines = [
         "New task:",
         new_task,
         "",
-        "Suggested estimate:",
-        f"{format_hours(stats['range_low'])}-{format_hours(stats['range_high'])} hours",
+        "Time planning view:",
+        f"{format_hours(planning_views['time']['range_low'])}-{format_hours(planning_views['time']['range_high'])} hours",
         "",
         "Point estimate:",
-        f"{format_hours(stats['point_estimate'])} hours",
+        f"{format_hours(planning_views['time']['point_estimate'])} hours",
+        "",
+        "Story point planning view:",
+        (
+            f"{format_story_points(planning_views['story_points']['range_low'])}-"
+            f"{format_story_point_label(planning_views['story_points']['range_high'])}"
+        ),
+        "",
+        "Point estimate:",
+        format_story_point_label(planning_views["story_points"]["point_estimate"]),
         "",
         "Confidence:",
         stats["confidence"].title(),

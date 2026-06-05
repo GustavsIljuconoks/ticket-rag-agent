@@ -8,6 +8,7 @@ The system uses:
 - Ollama embeddings for retrieval
 - ChromaDB as the persisted local vector database
 - deterministic effort statistics for the suggested numeric estimate
+- a fixed story point planning view derived from the hour estimate
 - Ollama chat for explanation only
 
 ## Setup
@@ -71,6 +72,20 @@ Estimate a new ticket:
 python src/main.py estimate "Add PDF export for invoice table"
 ```
 
+The estimate output shows both planning views:
+
+```text
+Time planning view:
+6-10 hours
+Point estimate:
+8 hours
+
+Story point planning view:
+3-5 points
+Point estimate:
+3 points
+```
+
 Skip the LLM explanation and show deterministic evidence only:
 
 ```bash
@@ -84,6 +99,8 @@ python src/main.py evaluate
 ```
 
 Evaluation uses `data/tasks.csv` as training data and `data/evaluation_tasks.csv` as held-out test data. Test tickets are excluded from the evaluation index, so the system cannot retrieve the same ticket it is trying to estimate.
+
+Evaluation reports hour MAE and derived story point MAE for the global average, global median, and RAG median methods. Story point error is derived by converting both predicted hours and actual hours through the same fixed mapping.
 
 The evaluation index is rebuilt on each run in:
 
@@ -108,3 +125,17 @@ outputs/evaluation_results.csv
 ## Estimate Boundary
 
 The CLI prints a suggested estimate and evidence. The user remains responsible for accepting or changing the final numeric estimate.
+
+## Story Point Mapping
+
+Story points are a derived planning view, not a separate learned estimate. The current fixed mapping is:
+
+```text
+<= 0.5h -> 0.5 points
+<= 2h   -> 1 point
+<= 4h   -> 2 points
+<= 8h   -> 3 points
+<= 16h  -> 5 points
+<= 32h  -> 8 points
+> 32h   -> 13 points
+```

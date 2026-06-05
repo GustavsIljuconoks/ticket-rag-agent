@@ -22,6 +22,15 @@ OUTPUTS_DIR = ROOT_DIR / "outputs"
 
 COLLECTION_NAME = "tickets"
 DEFAULT_TOP_K = 5
+STORY_POINT_MAPPING = [
+    (0.5, 0.5),
+    (2, 1),
+    (4, 2),
+    (8, 3),
+    (16, 5),
+    (32, 8),
+    (float("inf"), 13),
+]
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
 OLLAMA_EMBED_MODEL = os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text")
