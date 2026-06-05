@@ -1,0 +1,11 @@
+task_id,title,description,type,project,module,developer,estimate_hours,actual_hours,created_at
+E001,Add PDF export for invoice table,Add a PDF export action to the invoice table using current filters and company branding,feature,Billing System,invoices,Anna,8,10,2026-01-08
+E002,Add CSV export for customer list,Allow CRM users to export filtered customer records as a CSV file,feature,CRM,customers,Martins,5,6,2026-01-11
+E003,Fix login redirect after password reset,Redirect users to the login page after a successful password reset instead of the dashboard,bugfix,Customer Portal,auth,Laura,2,3,2026-01-15
+E004,Add admin activity filter by user,Add user and event type filters to the audit log page,feature,Admin Portal,audit-log,Anna,4,5.5,2026-01-19
+E005,Improve slow customer search,Optimize customer search performance when filtering by name email and notes,performance,CRM,search,Martins,7,9,2026-01-24
+E006,Add Teams notification integration,Send Microsoft Teams notifications when high priority support tickets are created,feature,Support Desk,notifications,Laura,8,10,2026-01-29
+E007,Add bulk customer import,Allow admins to upload CSV files to create customer records with validation preview,feature,CRM,customers,Anna,12,16,2026-02-03
+E008,Implement magic link login,Add passwordless magic link login with expiring email tokens and protected session creation,feature,Customer Portal,auth,Martins,13,17,2026-02-08
+E009,Fix duplicate webhook retries,Prevent duplicate webhook retry jobs when the same delivery fails multiple times,bugfix,Billing System,webhooks,Laura,5,7,2026-02-13
+E010,Add theme preference setting,Let users choose light dark or system theme and persist the preference,ui,Customer Portal,design-system,Anna,5,7,2026-02-18

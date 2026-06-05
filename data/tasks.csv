@@ -1,0 +1,26 @@
+task_id,title,description,type,project,module,developer,estimate_hours,actual_hours,created_at
+T001,Change primary button color,Update the primary action button color from blue to green across the dashboard UI,ui,Admin Portal,design-system,Anna,1,1.5,2025-09-02
+T002,Fix typo on settings page,Correct misspelled helper text in the notification preferences section,bugfix,Admin Portal,settings,Martins,0.5,0.5,2025-09-05
+T003,Add loading spinner to reports table,Show a loading spinner while report data is being fetched from the API,ui,Analytics App,reports,Laura,2,2.5,2025-09-09
+T004,Implement CSV export for users table,Add a CSV export button for the users table with current filters applied,feature,Admin Portal,users,Anna,5,6,2025-09-14
+T005,Add Excel export for sales report,Generate XLSX export for the monthly sales report including filters and totals,feature,Analytics App,reports,Laura,7,8.5,2025-09-18
+T006,Create invoice PDF generation,Generate downloadable PDF invoices from invoice data with company branding,feature,Billing System,invoices,Martins,10,12,2025-09-23
+T007,Fix mobile layout on login page,Adjust spacing and input widths so the login page works on small screens,bugfix,Customer Portal,auth,Anna,2,3,2025-09-27
+T008,Add password reset flow,Implement forgot password email flow with reset token validation and new password form,feature,Customer Portal,auth,Laura,9,11,2025-10-03
+T009,Implement user authentication,Add login/logout with session handling and protected routes for registered users,feature,Customer Portal,auth,Martins,16,20,2025-10-08
+T010,Add role based access control,Restrict admin pages by user role and add permission checks in backend endpoints,feature,Admin Portal,auth,Anna,14,18,2025-10-13
+T011,Fix incorrect invoice total rounding,Correct rounding logic for invoice line totals and tax calculations,bugfix,Billing System,invoices,Laura,3,4,2025-10-17
+T012,Add invoice status filter,Add filter tabs for paid unpaid and overdue invoices in the invoice list,feature,Billing System,invoices,Martins,4,5,2025-10-21
+T013,Create dashboard revenue chart,Add a line chart showing daily revenue for the selected date range,feature,Analytics App,dashboard,Anna,6,7.5,2025-10-26
+T014,Optimize slow ticket search,Improve ticket search query performance by adding indexes and limiting expensive joins,performance,Support Desk,search,Laura,8,10,2025-11-02
+T015,Add full text ticket search,Implement search across ticket title description and customer notes,feature,Support Desk,search,Martins,10,13,2025-11-08
+T016,Fix email notification duplicate sends,Prevent duplicate notification emails when a ticket status changes quickly,bugfix,Support Desk,notifications,Anna,5,6.5,2025-11-12
+T017,Add Slack notification integration,Send Slack messages when high priority support tickets are created,feature,Support Desk,notifications,Laura,8,9,2025-11-18
+T018,Change sidebar icon spacing,Reduce sidebar icon spacing and align labels with existing design tokens,ui,Admin Portal,navigation,Martins,1.5,2,2025-11-22
+T019,Add audit log page,Create an admin page that lists user actions with filters for actor date and event type,feature,Admin Portal,audit-log,Anna,9,12,2025-11-28
+T020,Implement two factor authentication,Add TOTP based two factor authentication setup verification and login challenge,feature,Customer Portal,auth,Laura,18,24,2025-12-04
+T021,Add bulk user import,Allow admins to upload CSV files to create users with validation and error preview,feature,Admin Portal,users,Martins,12,15,2025-12-09
+T022,Fix broken pagination on customers table,Correct pagination state after changing filters on the customers table,bugfix,CRM,customers,Anna,3,3.5,2025-12-12
+T023,Add customer notes field,Add internal notes field to customer profile with edit permissions and save history,feature,CRM,customers,Laura,5,7,2025-12-16
+T024,Create webhook delivery retry logic,Retry failed webhook deliveries with exponential backoff and store delivery attempts,feature,Billing System,webhooks,Martins,11,14,2025-12-20
+T025,Add dark mode toggle,Add user preference for dark mode and apply theme variables across main screens,ui,Customer Portal,design-system,Anna,6,8,2025-12-27
